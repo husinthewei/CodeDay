@@ -322,7 +322,6 @@ public class Main extends JPanel implements KeyListener, MouseListener, MouseMot
 		if(scene == "Start"){
 			if(arg0.getX() > 436 && arg0.getX() < 567 && arg0.getY() > 444 && arg0.getY() < 488){
 				scene = "CharSel";
-				winCon = 0;
 			}
 			if(arg0.getX() > 436 && arg0.getX() < 567 && arg0.getY() > 513 && arg0.getY() < 560){
 				scene = "Instructions";

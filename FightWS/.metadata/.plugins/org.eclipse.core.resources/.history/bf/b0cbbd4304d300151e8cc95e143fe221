@@ -1,0 +1,355 @@
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.awt.*;
+import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class Main extends JPanel implements KeyListener, MouseListener, MouseMotionListener{
+	public static BufferedImage test;
+	public static BufferedImage backgrnd;
+	public static BufferedImage strtbg;
+	public static BufferedImage strtgame;
+	public static BufferedImage pauseMenu;
+	public static BufferedImage quit;
+	public static BufferedImage instruct;
+	public static BufferedImage charSelbg;
+	public static BufferedImage JonMug1;
+	public static BufferedImage REMug1;
+	public static BufferedImage SMug1;
+	public static BufferedImage WMug1;
+	public static BufferedImage[] JMug = new BufferedImage[2];
+	public static BufferedImage[] REMug = new BufferedImage[2];
+	public static BufferedImage[] SMug = new BufferedImage[2];
+	public static BufferedImage[] WMug = new BufferedImage[2];
+	public static int J = 0 ;
+	public static int RE = 0;
+	public static int S = 0;
+	public static int W = 0;
+	public static int x = 0;
+	public static int xbg = -883;
+	public static Fighter player1 = new RE(1);
+	public static Fighter player2 = new JON(2);
+	
+	public static String scene = "Game";
+	
+	
+	public static void createFrame(Main g) throws IOException{
+		JFrame frame = new JFrame("Sewer Slugger 3: This time it's personal");
+		frame.add(g);
+		frame.addMouseListener(g);
+		frame.addMouseMotionListener(g);
+		frame.setSize(1000, 700);
+		frame.setResizable(false);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		g.addKeyListener(g);
+		g.setFocusable(true);
+		frame.setVisible(true);
+	}
+	
+	public static void InitializeImages() throws IOException{
+		test = ImageIO.read(new File("test.png"));
+		backgrnd = ImageIO.read(new File("Background3.png"));
+		strtbg = ImageIO.read(new File("Title1.png"));
+		strtgame = ImageIO.read(new File("StartGame.png"));
+		quit = ImageIO.read(new File("Quit.png"));
+		instruct = ImageIO.read(new File("Instructions.png"));
+		charSelbg = ImageIO.read(new File("charSel.png"));
+		JonMug1 = ImageIO.read(new File("Jon Mugh2.jpg"));
+		JMug[0] = ImageIO.read(new File("Jon Mugh2.jpg"));
+		JMug[1] = ImageIO.read(new File("Jon mugh.jpg"));
+		REMug1 = ImageIO.read(new File("RE mugh2.jpg"));
+		REMug[0] = ImageIO.read(new File("RE mugh2.jpg"));
+		REMug[1] = ImageIO.read(new File("RE mugh.jpg"));
+		SMug1 = ImageIO.read(new File("sas mugh1.jpg"));
+		SMug[0] = ImageIO.read(new File("sas mugh1.jpg"));
+		SMug[1] = ImageIO.read(new File("sas mugh2.jpg"));
+		WMug1 = ImageIO.read(new File("wei mugh1.jpg"));
+		WMug[0] = ImageIO.read(new File("wei mugh1.jpg"));
+		WMug[1] = ImageIO.read(new File("wei mugh2.jpg"));
+		pauseMenu = ImageIO.read(new File("pauseScreen.png"));
+	}
+	
+	public static void main(String[] args) throws IOException, InterruptedException {
+		Main demo = new Main();
+		createFrame(demo);
+		InitializeImages();
+		
+		while(true){
+			//System.out.println(player1.getX() + " " + player2.getX());
+			//System.out.println(player1.getDirection() + " " + player2.getDirection());
+			//System.out.println(player1.getTrueX() + " " + player2.getTrueX());
+			//System.out.println(player1.getState() + " " + player2.getState());
+			//System.out.println(player1.getState() + " " + player1.getDirection() + "  " +player2.getState() + " " + player2.getDirection() + " " + player2.getFrameNum() + " " + player2.getFrameCount());
+			System.out.println(player1.getY() + " " + player2.getY());
+			demo.repaint();
+			Thread.sleep(10);
+		}
+
+	}
+
+	public void paint(Graphics g){
+		Graphics2D g2d = (Graphics2D) g;
+		paintComponent(g);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		
+		if(scene == "Pause"){
+			
+		}
+		
+		if(scene == "Start"){
+			g2d.drawImage(strtbg,0,0,null);
+			g2d.drawImage(strtgame, 425, 410, null);
+			g2d.drawImage(instruct, 425, 480, null);
+			g2d.drawImage(quit, 425, 550, null);
+			
+				
+			}
+		if(scene == "CharSel"){
+			g2d.drawImage(charSelbg, 0,-30,null);
+			g2d.drawImage(JMug[J], 175, 145, null);
+			g2d.drawImage(SMug[S], 600, 145, null);
+			g2d.drawImage(REMug[RE], 175, 410, null);
+			g2d.drawImage(WMug[W], 600, 410, null);
+		}
+		
+		if(scene == "Game"){
+			checkBoundaries();
+			player1.move();
+			player2.move();
+			g2d.drawImage(backgrnd,xbg,0,null);
+			//g2d.drawImage(test, player1.getX(), player1.getY(),null);
+			//g2d.drawImage(test, player2.getX(), player2.getY(), null);
+			player1.updateFrame(); player2.updateFrame();
+			//g2d.fillRect(player1.getX(), player1.getY(), 200, 300);
+			g2d.drawImage(player1.getCurrentFrame(), player1.getX() - 150, player1.getY(), null);
+			g2d.drawImage(player2.getCurrentFrame(), player2.getX() - 150, player2.getY(), null);
+			drawHealth(g);
+		}
+
+	}
+	
+	public void drawHealth(Graphics g){
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setColor(Color.RED);
+		g2d.fillRect(100, 10, (int)(3 * (player1.getHealth())), 40);
+		g2d.fillRect(600, 10, (int)(3 * (player2.getHealth())), 40);
+		//player1.decreaseHealth(1);
+		g2d.setColor(Color.BLACK);
+	}
+	
+	
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		if(scene == "Game"){
+		
+		if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE){
+			scene = "Pause";
+		}
+			
+		if(arg0.getKeyCode() == 87){
+			player1.setJumping(true);
+		}
+		
+		if(arg0.getKeyCode() == 68){
+			player1.setMoveRight(4);
+			player1.setState("moving");
+		}
+		if(arg0.getKeyCode() == 65){
+			player1.setMoveLeft(4);
+			player1.setState("moving");
+		}
+
+		
+		if(arg0.getKeyCode() == 38){
+			player2.setJumping(true);
+		}
+		if(arg0.getKeyCode() == 39){
+			player2.setMoveRight(4);
+			player2.setState("moving");
+		}
+		if(arg0.getKeyCode() == 37){
+			player2.setMoveLeft(4);
+			player2.setState("moving");
+		}
+		
+		if(arg0.getKeyCode() == 71){
+			player1.setState("shield");
+		}
+		if(arg0.getKeyCode() == 10){
+			player2.setState("shield");
+		}
+		if(arg0.getKeyCode() == 72){
+			  player1.useAttack2(player1, player2);
+		}
+		
+		if(arg0.getKeyCode() == 110){
+			  player2.useAttack2(player2, player1);
+		}
+		
+		if(arg0.getKeyCode() == 74){
+			if(((player1.getState() == "rest"||player1.getState() == "moving")) && !player1.isJumping())
+			  player1.useAttack1(player1, player2);
+		}
+		
+		if(arg0.getKeyCode() == 96){
+			if((player2.getState() == "rest"||player2.getState() == "moving") && !player2.isJumping())
+				  player2.useAttack1(player2, player1);			
+		}
+		}
+		
+		
+		if(scene == "pause"){
+			if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE){
+				scene = "Game";
+			}
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		if(arg0.getKeyCode() == 68){
+			player1.setMoveRight(0);
+			player1.setState("rest");
+		}
+		if(arg0.getKeyCode() == 65){
+			player1.setMoveLeft(0);
+			player1.setState("rest");
+		}
+		
+		if(arg0.getKeyCode() == 39){
+			player2.setMoveRight(0);
+			player2.setState("rest");
+		}
+		if(arg0.getKeyCode() == 37){
+			player2.setMoveLeft(0);
+			player2.setState("rest");
+		}
+		
+		if(arg0.getKeyCode() == 71){
+			player1.setState("rest");
+		}
+		if(arg0.getKeyCode() == 10){
+			player2.setState("rest");
+		}
+	}
+	
+	public static void checkBoundaries(){
+		if(player1.getX() <= 0){
+			player1.setX(1);
+			if(xbg >= -10){
+				xbg = -10;
+			}
+			xbg += 4;
+		}
+		if(player1.getX() >= 891){
+			player1.setX(890);
+			if(xbg <= -500){
+				xbg = -500;
+			}
+			xbg -= 4;
+		}
+		
+		if(player2.getX() <= 0){
+			player2.setX(1);
+			if(xbg >= -10){
+				xbg = -10;
+			}
+			xbg += 4;
+		}
+		if(player2.getX() >= 891){
+			player2.setX(890);
+			if(xbg <= -2465){
+				xbg = -2465;
+			}
+			xbg -= 4;
+		}
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		System.out.print(arg0.getX() + " ");
+		System.out.println(arg0.getY());
+		if(scene == "Start"){
+			if(arg0.getX() > 436 && arg0.getX() < 567 && arg0.getY() > 444 && arg0.getY() < 488){
+				scene = "CharSel";
+			}
+			if(arg0.getX() > 436 && arg0.getX() < 567 && arg0.getY() > 513 && arg0.getY() < 560){
+				scene = "Instructions";
+			}
+			if(arg0.getX() > 436 && arg0.getX() < 567 && arg0.getY() > 585 && arg0.getY() < 626){
+				System.exit(0);
+			}
+		}
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+		
+		
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseMoved(MouseEvent arg0) {
+		if(arg0.getX() > 175 && arg0.getX() < 426 && arg0.getY() > 174 && arg0.getY() < 365){
+			J = 1;
+		}
+		else{
+			J = 0;
+		}
+		if(arg0.getX() > 602 && arg0.getX() < 852 && arg0.getY() > 174 && arg0.getY() < 365){
+			S = 1;
+		}
+		else{
+			S = 0;
+		}
+		if(arg0.getX() > 175 && arg0.getX() < 426 && arg0.getY() > 441 && arg0.getY() < 632){
+			RE = 1;
+		}
+		else{
+			RE = 0;
+		}
+		if(arg0.getX() > 602 && arg0.getX() < 852 && arg0.getY() > 441 && arg0.getY() < 632){
+			W = 1;
+		}
+		else{
+			W = 0;
+		}
+		
+	}
+
+}

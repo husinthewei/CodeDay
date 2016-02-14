@@ -9,7 +9,6 @@ public class JON extends Fighter{
 	private BufferedImage[] Rrest = new BufferedImage[4];
 	private BufferedImage[] Rwalk = new BufferedImage[3];
 	
-	
 	private BufferedImage[] arial = new BufferedImage[3];
 	private BufferedImage[] Rarial = new BufferedImage[3];
 	

@@ -34,8 +34,8 @@ public class JON extends Fighter{
 	private Attack[] attacks = new Attack[2];
 	public JON(int PlayerNum){
 		super(PlayerNum);	
-		attacks[0] = new hAttack(230,20, 1); //radius, damage, attack num
-		attacks[1] = new aAttack(230, 20, 2);
+		attacks[0] = new hAttack(230,10, 1); //radius, damage, attack num
+		attacks[1] = new aAttack(230, 10, 2);
 		try {
 			InitializeImages();
 		} catch (IOException e) {
@@ -95,8 +95,8 @@ public class JON extends Fighter{
 		Rfall[0] = ImageIO.read(new File("JF1R.png"));
 		Rfall[1] = ImageIO.read(new File("JF2R.png"));
 		
-		rShield = ImageIO.read(new File("sheild.png"));
-		lShield = ImageIO.read(new File("sheildR.png"));
+		rShield = ImageIO.read(new File("JS1.png"));
+		lShield = ImageIO.read(new File("JS1R.png"));
 	}
 	
 	public void useAttack1(Fighter user, Fighter target){
@@ -274,6 +274,7 @@ public class JON extends Fighter{
 				this.setCurrentFrame(punch[0]);
 			if(frameNum == 1){
 				this.setCurrentFrame(punch[1]);
+				if(Hit)
 				attacks[0].makeHurt();
 			}
 			if(frameNum == 2){
@@ -303,6 +304,7 @@ public class JON extends Fighter{
 				this.setCurrentFrame(Rpunch[0]);
 			if(frameNum == 1){
 				this.setCurrentFrame(Rpunch[1]);
+				if(Hit)
 				attacks[0].makeHurt();
 			}
 			if(frameNum == 2){
@@ -327,8 +329,10 @@ public class JON extends Fighter{
 			if(frameCount <= 10)
 				this.setCurrentFrame(arial[0]);
 			
-			if(frameCount == 8)
+			if(frameCount == 8){
+				if(Hit)
 				attacks[1].makeHurt();
+			}
 			
 			if(frameCount > 10 && frameCount <= 20){
 				this.setCurrentFrame(arial[1]);
@@ -359,6 +363,7 @@ public class JON extends Fighter{
 				this.setCurrentFrame(Rarial[0]);
 			if(frameCount > 10 && frameCount <= 15){
 				this.setCurrentFrame(Rarial[1]);
+				if(Hit)
 				attacks[1].makeHurt();
 			}
 			if(!this.isJumping()){
@@ -371,7 +376,6 @@ public class JON extends Fighter{
 				this.setCurrentFrame(Rarial[2]);
 				if(Hit){
 					attacks[1].dealDmg();
-
 					Hit = false;
 				}	
 			}

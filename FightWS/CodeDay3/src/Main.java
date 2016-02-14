@@ -3,6 +3,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,9 +15,26 @@ import javax.sound.sampled.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Main extends JPanel implements KeyListener{
+public class Main extends JPanel implements KeyListener, MouseListener, MouseMotionListener{
 	public static BufferedImage test;
 	public static BufferedImage backgrnd;
+	public static BufferedImage strtbg;
+	public static BufferedImage strtgame;
+	public static BufferedImage quit;
+	public static BufferedImage instruct;
+	public static BufferedImage charSelbg;
+	public static BufferedImage JonMug1;
+	public static BufferedImage REMug1;
+	public static BufferedImage SMug1;
+	public static BufferedImage WMug1;
+	public static BufferedImage[] JMug = new BufferedImage[2];
+	public static BufferedImage[] REMug = new BufferedImage[2];
+	public static BufferedImage[] SMug = new BufferedImage[2];
+	public static BufferedImage[] WMug = new BufferedImage[2];
+	public static int J = 0 ;
+	public static int RE = 0;
+	public static int S = 0;
+	public static int W = 0;
 	public static int x = 0;
 	public static int xbg = -250;
 	public static Fighter player1 = new JON(1);
@@ -26,6 +46,8 @@ public class Main extends JPanel implements KeyListener{
 	public static void createFrame(Main g) throws IOException{
 		JFrame frame = new JFrame("Sewer Slugger 3: This time it's personal");
 		frame.add(g);
+		frame.addMouseListener(g);
+		frame.addMouseMotionListener(g);
 		frame.setSize(1000, 700);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,6 +59,23 @@ public class Main extends JPanel implements KeyListener{
 	public static void InitializeImages() throws IOException{
 		test = ImageIO.read(new File("test.png"));
 		backgrnd = ImageIO.read(new File("Background.png"));
+		strtbg = ImageIO.read(new File("Title1.png"));
+		strtgame = ImageIO.read(new File("StartGame.png"));
+		quit = ImageIO.read(new File("Quit.png"));
+		instruct = ImageIO.read(new File("Instructions.png"));
+		charSelbg = ImageIO.read(new File("charSel.png"));
+		JonMug1 = ImageIO.read(new File("Jon Mugh2.jpg"));
+		JMug[0] = ImageIO.read(new File("Jon Mugh2.jpg"));
+		JMug[1] = ImageIO.read(new File("Jon mugh.jpg"));
+		REMug1 = ImageIO.read(new File("RE mugh2.jpg"));
+		REMug[0] = ImageIO.read(new File("RE mugh2.jpg"));
+		REMug[1] = ImageIO.read(new File("RE mugh.jpg"));
+		SMug1 = ImageIO.read(new File("sas mugh1.jpg"));
+		SMug[0] = ImageIO.read(new File("sas mugh1.jpg"));
+		SMug[1] = ImageIO.read(new File("sas mugh2.jpg"));
+		WMug1 = ImageIO.read(new File("wei mugh1.jpg"));
+		WMug[0] = ImageIO.read(new File("wei mugh1.jpg"));
+		WMug[1] = ImageIO.read(new File("wei mugh2.jpg"));
 	}
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -63,9 +102,19 @@ public class Main extends JPanel implements KeyListener{
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		if(scene == "Start"){
-			g2d.drawImage(backgrnd,0,0,null);
+			g2d.drawImage(strtbg,0,0,null);
+			g2d.drawImage(strtgame, 425, 410, null);
+			g2d.drawImage(instruct, 425, 480, null);
+			g2d.drawImage(quit, 425, 550, null);
 			
-			
+				
+			}
+		if(scene == "CharSel"){
+			g2d.drawImage(charSelbg, 0,-30,null);
+			g2d.drawImage(JMug[J], 175, 145, null);
+			g2d.drawImage(SMug[S], 600, 145, null);
+			g2d.drawImage(REMug[RE], 175, 410, null);
+			g2d.drawImage(WMug[W], 600, 410, null);
 		}
 		
 		if(scene == "Game"){
@@ -205,6 +254,75 @@ public class Main extends JPanel implements KeyListener{
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
+		
+	}
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		System.out.print(arg0.getX() + " ");
+		System.out.println(arg0.getY());
+		if(scene == "Start"){
+			if(arg0.getX() > 436 && arg0.getX() < 567 && arg0.getY() > 444 && arg0.getY() < 488){
+				scene = "CharSel";
+			}
+			if(arg0.getX() > 436 && arg0.getX() < 567 && arg0.getY() > 513 && arg0.getY() < 560){
+				scene = "Instructions";
+			}
+			if(arg0.getX() > 436 && arg0.getX() < 567 && arg0.getY() > 585 && arg0.getY() < 626){
+				System.exit(0);
+			}
+		}
+	}
+
+	public void mouseEntered(MouseEvent arg0) {
+		
+		
+	}
+
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseMoved(MouseEvent arg0) {
+		if(arg0.getX() > 175 && arg0.getX() < 426 && arg0.getY() > 174 && arg0.getY() < 365){
+			J = 1;
+		}
+		else{
+			J = 0;
+		}
+		if(arg0.getX() > 602 && arg0.getX() < 852 && arg0.getY() > 174 && arg0.getY() < 365){
+			S = 1;
+		}
+		else{
+			S = 0;
+		}
+		if(arg0.getX() > 175 && arg0.getX() < 426 && arg0.getY() > 441 && arg0.getY() < 632){
+			RE = 1;
+		}
+		else{
+			RE = 0;
+		}
+		if(arg0.getX() > 602 && arg0.getX() < 852 && arg0.getY() > 441 && arg0.getY() < 632){
+			W = 1;
+		}
+		else{
+			W = 0;
+		}
 		
 	}
 
